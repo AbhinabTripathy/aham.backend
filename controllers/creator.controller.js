@@ -59,7 +59,8 @@ creatorController.register = async (req, res) => {
         const token = jwt.sign(
             { 
                 id: newCreator.id, 
-                username: newCreator.username 
+                username: newCreator.username,
+                role: 'creator' 
             },
             process.env.APP_SUPER_SECRET_KEY,
             { expiresIn: '24h' }
@@ -138,7 +139,8 @@ creatorController.login = async (req, res) => {
         const token = jwt.sign(
             { 
                 id: creator.id, 
-                username: creator.username
+                username: creator.username,
+                role: 'creator' // Add role field for middleware authentication
             },
             process.env.APP_SUPER_SECRET_KEY,
             { expiresIn: '24h' }

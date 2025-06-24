@@ -37,6 +37,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const creatorRoutes = require('./routes/creator.routes');
 const graphicNovelRoutes = require('./routes/graphicNovel.routes');
 const audiobookRoutes = require('./routes/audiobook.routes');
+const adminRoutes = require('./routes/admin.routes');
 
 // Routes
 app.get('/', (req, res) => {
@@ -47,6 +48,7 @@ app.get('/', (req, res) => {
 app.use('/api/creators', creatorRoutes);
 app.use('/api/graphic-novels', graphicNovelRoutes);
 app.use('/api/audiobooks', audiobookRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Error handling middleware
 app.use(handleNotFound);

@@ -5,15 +5,15 @@ const Audiobook = require('./audiobook.model');
 const AudiobookEpisode = require('./audiobookEpisode.model');
 
 // Define model associations
-Creator.hasMany(GraphicNovel, { foreignKey: 'creatorId' });
-GraphicNovel.belongsTo(Creator, { foreignKey: 'creatorId' });
+Creator.hasMany(GraphicNovel, { foreignKey: 'creatorId', constraints: false });
+GraphicNovel.belongsTo(Creator, { foreignKey: 'creatorId', constraints: false });
 
 GraphicNovel.hasMany(Episode, { foreignKey: 'graphicNovelId' });
 Episode.belongsTo(GraphicNovel, { foreignKey: 'graphicNovelId' });
 
 // Audiobook associations
-Creator.hasMany(Audiobook, { foreignKey: 'creatorId' });
-Audiobook.belongsTo(Creator, { foreignKey: 'creatorId' });
+Creator.hasMany(Audiobook, { foreignKey: 'creatorId', constraints: false });
+Audiobook.belongsTo(Creator, { foreignKey: 'creatorId', constraints: false });
 
 Audiobook.hasMany(AudiobookEpisode, { foreignKey: 'audiobookId' });
 AudiobookEpisode.belongsTo(Audiobook, { foreignKey: 'audiobookId' });

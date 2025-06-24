@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { User, Vendor, Creator } = require('../models');
+const { Creator } = require('../models');
 const HttpStatus = require('../enums/httpStatusCode.enum');
 const ResponseMessages = require('../enums/responseMessages.enum');
 
@@ -19,25 +19,31 @@ authMiddleware.checkAuth = async (req, res, next) => {
             console.log("Decoded token:", decoded);
 
             let user;
-            if (decoded.role === 'vendor') {
-                user = await Vendor.findByPk(decoded.id);
+            // Special handling for admin role since it's not stored in database
+            if (decoded.role === 'admin') {
+                // For admin, we don't need to fetch from database
+                // Just use the decoded token information
+                user = {
+                    id: decoded.id,
+                    username: decoded.username,
+                    role: 'admin'
+                };
             } else if (decoded.role === 'creator') {
                 user = await Creator.findByPk(decoded.id);
+                if (!user) {
+                    return res.error(HttpStatus.UNAUTHORIZED, false, "Creator not found");
+                }
+                user.role = 'creator';
             } else {
-                user = await User.findByPk(decoded.id);
+                return res.error(HttpStatus.UNAUTHORIZED, false, "Invalid user role");
             }
             
-            if (!user) {
-                return res.error(HttpStatus.UNAUTHORIZED, false, "User not found");
-            }
-
             console.log("User found:", {
                 id: user.id,
-                role: decoded.role || 'creator' // Default to creator if role not specified
+                role: user.role
             });
 
             req.user = user;
-            req.user.role = decoded.role || 'creator'; // Ensure role is available
             next();
         } catch (error) {
             console.error("Token verification error:", error);
@@ -110,6 +116,11 @@ authMiddleware.creatorAuth = async (req, res, next) => {
         try {
             const decoded = jwt.verify(token, process.env.APP_SUPER_SECRET_KEY);
             
+            // Verify the token is for a creator
+            if (decoded.role !== 'creator') {
+                return res.error(HttpStatus.FORBIDDEN, false, "Access denied. Creator privileges required.");
+            }
+            
             // Find the creator
             const creator = await Creator.findByPk(decoded.id);
             
@@ -123,6 +134,7 @@ authMiddleware.creatorAuth = async (req, res, next) => {
             }
 
             req.user = creator;
+            req.user.role = 'creator'; // Ensure role is available
             next();
         } catch (error) {
             console.error("Token verification error:", error);

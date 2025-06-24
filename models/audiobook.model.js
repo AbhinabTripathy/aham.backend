@@ -17,11 +17,16 @@ const Audiobook = sequelize.define('audiobook', {
     },
     creatorId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'creators',
-            key: 'id'
-        }
+        allowNull: true
+        // Removed foreign key constraint to allow null values
+    },
+    adminId: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    role: {
+        type: DataTypes.ENUM('admin', 'creator'),
+        defaultValue: 'creator'
     },
     status: {
         type: DataTypes.ENUM('pending', 'published', 'rejected'),

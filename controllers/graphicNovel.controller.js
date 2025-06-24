@@ -47,6 +47,7 @@ graphicNovelController.createGraphicNovel = async (req, res) => {
             type,
             novelIcon,
             creatorId,
+            role: 'creator', // Set role to creator when created by a creator
             status: 'pending' // Set status to pending for admin review
         });
 

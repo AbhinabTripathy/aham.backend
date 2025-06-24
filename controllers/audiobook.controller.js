@@ -46,6 +46,7 @@ audiobookController.createAudiobook = async (req, res) => {
             title,
             bookIcon,
             creatorId,
+            role: 'creator', // Set role to creator when created by a creator
             status: 'pending' // Set status to pending for admin review
         });
 
