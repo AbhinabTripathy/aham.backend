@@ -18,7 +18,7 @@ router.get('/audiobooks', checkAuth, isAdmin, adminController.getAllAudiobooks);
 router.get('/audiobooks/:id', checkAuth, isAdmin, adminController.getAudiobookDetails);
 router.put('/audiobooks/:id/status', checkAuth, isAdmin, adminController.updateAudiobookStatus);
 router.post('/audiobooks', checkAuth, isAdmin, adminController.createAudiobook);
-router.post('/audiobooks/:id/episodes', checkAuth, isAdmin, adminController.addEpisodeToAudiobook);
+router.post('/audiobooks/:audiobookId/episodes', checkAuth, isAdmin, adminController.addEpisodeToAudiobook);
 
 // Creator management routes (admin only)
 router.get('/creators', checkAuth, isAdmin, adminController.getAllCreators);

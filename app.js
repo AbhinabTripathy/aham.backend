@@ -4,6 +4,8 @@ const sequelize = require('./config/db');
 const sendResponse = require('./middlewares/response.middleware');
 const handleNotFound = require('./middlewares/notFound.middleware');
 const errorHandler = require('./middlewares/errorHandler.middleware');
+const userRoutes = require('./routes/user.routes');
+
 const cors = require('cors');
 const path = require('path');
 
@@ -15,7 +17,7 @@ const baseUrl = process.env.BASE_URL || `http://localhost:${port}`;
 
 // CORS configuration
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://ahamcore.com'], // Allow all origins, or specify allowed origins
+  origin: ['http://localhost:3000', 'https://ahamcore.com'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -49,6 +51,8 @@ app.use('/api/creators', creatorRoutes);
 app.use('/api/graphic-novels', graphicNovelRoutes);
 app.use('/api/audiobooks', audiobookRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/user', userRoutes);
+
 
 // Error handling middleware
 app.use(handleNotFound);
