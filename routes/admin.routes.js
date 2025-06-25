@@ -11,7 +11,7 @@ router.get('/graphic-novels', checkAuth, isAdmin, adminController.getAllGraphicN
 router.get('/graphic-novels/:id', checkAuth, isAdmin, adminController.getGraphicNovelDetails);
 router.put('/graphic-novels/:id/status', checkAuth, isAdmin, adminController.updateGraphicNovelStatus);
 router.post('/graphic-novels', checkAuth, isAdmin, adminController.createGraphicNovel);
-router.post('/graphic-novels/:id/episodes', checkAuth, isAdmin, adminController.addEpisodeToGraphicNovel);
+router.post('/graphic-novels/:graphicNovelId/episodes', checkAuth, isAdmin, adminController.addEpisodeToGraphicNovel);
 
 // Audiobook routes (admin only)
 router.get('/audiobooks', checkAuth, isAdmin, adminController.getAllAudiobooks);

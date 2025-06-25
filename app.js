@@ -15,7 +15,7 @@ const baseUrl = process.env.BASE_URL || `http://localhost:${port}`;
 
 // CORS configuration
 app.use(cors({
-  origin: '*', // Allow all origins, or specify allowed origins
+  origin: ['http://localhost:3000', 'https://ahamcore.com'], // Allow all origins, or specify allowed origins
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
