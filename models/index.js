@@ -1,49 +1,31 @@
 const Creator = require('./creator.model');
 const GraphicNovel = require('./graphicNovel.model');
-const Episode = require('./graphicNovelEpisode.model');
+const GraphicNovelEpisode = require('./graphicNovelEpisode.model');
 const Audiobook = require('./audiobook.model');
 const AudiobookEpisode = require('./audiobookEpisode.model');
-const User=require('./user.model');
+const User = require('./user.model');
 
-
-
-// Define model associations
+// Creator to Graphic Novel
 Creator.hasMany(GraphicNovel, { foreignKey: 'creatorId', constraints: false });
 GraphicNovel.belongsTo(Creator, { foreignKey: 'creatorId', constraints: false });
 
-GraphicNovel.hasMany(Episode, { foreignKey: 'graphicNovelId' });
-Episode.belongsTo(GraphicNovel, { foreignKey: 'graphicNovelId' });
+// Graphic Novel to Episodes
+GraphicNovel.hasMany(GraphicNovelEpisode, { foreignKey: 'graphicNovelId', as: 'episodes' });
+GraphicNovelEpisode.belongsTo(GraphicNovel, { foreignKey: 'graphicNovelId', as: 'graphicNovel' });
 
-// Audiobook associations
+// Creator to Audiobook
 Creator.hasMany(Audiobook, { foreignKey: 'creatorId', constraints: false });
 Audiobook.belongsTo(Creator, { foreignKey: 'creatorId', constraints: false });
 
-Audiobook.hasMany(AudiobookEpisode, { foreignKey: 'audiobookId' });
-AudiobookEpisode.belongsTo(Audiobook, { foreignKey: 'audiobookId' });
-
-GraphicNovel.hasMany(Episode, {
-  foreignKey: 'graphicNovelId',
-  as: 'episodes'
-});
-Episode.belongsTo(GraphicNovel, {
-  foreignKey: 'graphicNovelId'
-});
-
-Audiobook.hasMany(AudiobookEpisode, {
-  foreignKey: 'audiobookId',
-  as: 'episodes'
-});
-AudiobookEpisode.belongsTo(Audiobook, {
-  foreignKey: 'audiobookId'
-});
+// Audiobook to Audiobook Episodes
+Audiobook.hasMany(AudiobookEpisode, { foreignKey: 'audiobookId', as: 'episodes' });
+AudiobookEpisode.belongsTo(Audiobook, { foreignKey: 'audiobookId', as: 'audiobook' });
 
 module.exports = {
-    Creator,
-    GraphicNovel,
-    Episode,
-    Audiobook,
-    AudiobookEpisode,
-    User
-    
-      
+  Creator,
+  GraphicNovel,
+  GraphicNovelEpisode,
+  Audiobook,
+  AudiobookEpisode,
+  User
 };

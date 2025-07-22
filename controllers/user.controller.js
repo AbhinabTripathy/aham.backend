@@ -1,4 +1,4 @@
-const { User,GraphicNovel,Audiobook,AudiobookEpisode,Episode } = require('../models');
+const { User,GraphicNovel,Audiobook,AudiobookEpisode,GraphicNovelEpisode } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const HttpStatus = require('../enums/httpStatusCode.enum');
@@ -272,4 +272,56 @@ userController.getPublishedAudiobooks = async (req, res) => {
     );
   }
 };
+
+// GET graphic-novel by  id............................
+
+userController.getGraphicNovelById =async (req, res) => {
+  try {
+    const { id } = req.params;
+    const graphicNovel = await GraphicNovel.findByPk(id, {
+      include: [
+        {
+          model: GraphicNovelEpisode, 
+          as: 'episodes' 
+        }
+      ]
+    });
+
+    if (!graphicNovel) {
+      return res.status(404).json({ message: 'Graphic Novel not found' });
+    }
+
+    res.status(200).json({ graphicNovel });
+  } catch (error) {
+    console.error('Error fetching graphic novel:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+// GET audiobook by id.............................
+
+userController.getAudioBookById=async (req, res) => {
+  try {
+    const { id } = req.params;
+    const audiobook = await Audiobook.findByPk(id, {
+      include: [
+        {
+          model: AudiobookEpisode,
+          as: 'episodes' 
+        }
+      ]
+    });
+
+    if (!audiobook) {
+      return res.status(404).json({ message: 'Audiobook not found' });
+    }
+
+    res.status(200).json({ audiobook });
+  } catch (error) {
+    console.error('Error fetching audiobook:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 module.exports = userController;

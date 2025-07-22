@@ -43,4 +43,6 @@ const GraphicNovel = sequelize.define('graphicNovel', {
     }
 });
 
+
+
 module.exports = GraphicNovel;

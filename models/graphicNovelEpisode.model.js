@@ -37,4 +37,5 @@ const Episode = sequelize.define('graphicNovelEpisode', {
     }
 });
 
+
 module.exports = Episode;

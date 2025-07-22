@@ -41,10 +41,7 @@ const graphicNovelRoutes = require('./routes/graphicNovel.routes');
 const audiobookRoutes = require('./routes/audiobook.routes');
 const adminRoutes = require('./routes/admin.routes');
 
-// Routes
-app.get('/', (req, res) => {
-    res.success(200, 'true', 'Welcome to AhamCore API', { version: '1.0.0' });
-});
+
 
 // API routes
 app.use('/api/creators', creatorRoutes);
