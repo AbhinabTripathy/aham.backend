@@ -207,7 +207,7 @@ audiobookController.getAudiobookDetails = async (req, res) => {
                 attributes: ['id', 'episodeNumber', 'iconPath', 'youtubeUrl', 'createdAt']
             }],
             order: [
-                [{ model: audiobookEpisode, as: 'episodes' }, 'createdAt', 'DESC']
+                [{ model: AudiobookEpisode, as: 'episodes' }, 'createdAt', 'DESC']
             ]
         });
 
@@ -232,6 +232,45 @@ audiobookController.getAudiobookDetails = async (req, res) => {
             HttpStatus.INTERNAL_SERVER_ERROR,
             false,
             "Error fetching audiobook details",
+            error
+        );
+    }
+};
+
+// Get a specific episode of a specific audiobook
+audiobookController.getAudiobookEpisodeById = async (req, res) => {
+    try {
+        const { audiobookId, episodeId } = req.params;
+
+        const episode = await AudiobookEpisode.findOne({
+            where: {
+                id: episodeId,
+                audiobookId: audiobookId
+            },
+            attributes: ['id', 'episodeNumber', 'iconPath', 'youtubeUrl', 'createdAt', 'audiobookId']
+        });
+
+        if (!episode) {
+            return res.error(
+                HttpStatus.NOT_FOUND,
+                false,
+                "Episode not found for the given audiobook"
+            );
+        }
+
+        return res.success(
+            HttpStatus.OK,
+            true,
+            "Episode fetched successfully",
+            { episode }
+        );
+
+    } catch (error) {
+        console.error('Fetch audiobook episode error:', error);
+        return res.error(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            false,
+            "Error fetching audiobook episode",
             error
         );
     }

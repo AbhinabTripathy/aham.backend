@@ -2,6 +2,11 @@ const express = require('express');
 const router = express.Router();
 const audiobookController = require('../controllers/audiobook.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
+
+
+// Get specific episode of a specific audiobook (public)
+router.get('/:audiobookId/episodes/:episodeId', audiobookController.getAudiobookEpisodeById);
+
 router.use(authMiddleware.creatorAuth);
 
 // Create a new audiobook

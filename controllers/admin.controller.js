@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { GraphicNovel, Episode, Audiobook, AudiobookEpisode, Creator } = require('../models');
+const { GraphicNovel, GraphicNovelEpisode, Audiobook, AudiobookEpisode, Creator } = require('../models');
 const { Op } = require('sequelize');
 const HttpStatus = require('../enums/httpStatusCode.enum');
 const ResponseMessages = require('../enums/responseMessages.enum');
@@ -77,15 +77,18 @@ adminController.getAllGraphicNovels = async (req, res) => {
         const graphicNovels = await GraphicNovel.findAll({
             include: [
                 {
-                    model: Episode,
+                    model: GraphicNovelEpisode,
+                    as:'episodes',
                     attributes: ['id', 'episodeNumber', 'iconPath', 'pdfPath', 'createdAt']
                 },
                 {
                     model: Creator,
+                    as:'creator',
                     attributes: ['id', 'username', 'email', 'phoneNumber']
                 }
             ],
-            order: [['createdAt', 'DESC'], [Episode, 'episodeNumber', 'ASC']]
+            order: [['createdAt', 'DESC'], 
+            [{ model: GraphicNovelEpisode, as: 'episodes' }, 'episodeNumber', 'ASC']]
         });
 
         return res.success(
@@ -115,15 +118,17 @@ adminController.getGraphicNovelDetails = async (req, res) => {
             where: { id },
             include: [
                 {
-                    model: Episode,
+                    model: GraphicNovelEpisode,
+                    as:'episodes',
                     attributes: ['id', 'episodeNumber', 'iconPath', 'pdfPath', 'createdAt']
                 },
                 {
                     model: Creator,
+                    as:'creator',
                     attributes: ['id', 'username', 'email', 'phoneNumber']
                 }
             ],
-            order: [[Episode, 'episodeNumber', 'ASC']]
+            order: [['episodes', 'episodeNumber', 'ASC']]
         });
 
         if (!graphicNovel) {
@@ -360,14 +365,16 @@ adminController.getAllAudiobooks = async (req, res) => {
             include: [
                 {
                     model: AudiobookEpisode,
+                    as:'episodes',
                     attributes: ['id', 'episodeNumber', 'iconPath', 'youtubeUrl', 'createdAt']
                 },
                 {
                     model: Creator,
+                    as:'creator',
                     attributes: ['id', 'username', 'email', 'phoneNumber']
                 }
             ],
-            order: [['createdAt', 'DESC'], [AudiobookEpisode, 'episodeNumber', 'ASC']]
+            order: [['createdAt', 'DESC'], ['episodes', 'episodeNumber', 'ASC']]
         });
 
         return res.success(
@@ -398,14 +405,16 @@ adminController.getAudiobookDetails = async (req, res) => {
             include: [
                 {
                     model: AudiobookEpisode,
+                    as:'episodes',
                     attributes: ['id', 'episodeNumber', 'iconPath', 'youtubeUrl', 'createdAt']
                 },
                 {
                     model: Creator,
+                    as:'creator',
                     attributes: ['id', 'username', 'email', 'phoneNumber']
                 }
             ],
-            order: [[AudiobookEpisode, 'episodeNumber', 'ASC']]
+            order: [['episodes', 'episodeNumber', 'ASC']]
         });
 
         if (!audiobook) {

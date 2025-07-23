@@ -243,4 +243,50 @@ graphicNovelController.getGraphicNovelDetails = async (req, res) => {
     }
 };
 
+
+// Get a specific episode of a graphic novel by IDs 
+graphicNovelController.getGraphicNovelEpisodeById = async (req, res) => {
+  try {
+    const { novelId, episodeId } = req.params;
+
+    const episode = await GraphicNovelEpisode.findOne({
+      where: {
+        id: episodeId,
+        graphicNovelId: novelId
+      },
+      attributes: ['id', 'episodeNumber', 'iconPath', 'pdfPath', 'createdAt'],
+      include: [{
+        model: GraphicNovel,
+        as: 'graphicNovel',
+        attributes: ['id', 'title']
+      }]
+    });
+
+    if (!episode) {
+      return res.error(
+        HttpStatus.NOT_FOUND,
+        false,
+        "Episode not found"
+      );
+    }
+
+    return res.success(
+      HttpStatus.OK,
+      true,
+      ResponseMessages.FETCH,
+      { episode }
+    );
+
+  } catch (error) {
+    console.error('Fetch public episode error:', error);
+    return res.error(
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      false,
+      "Error fetching episode details",
+      error
+    );
+  }
+};
+
+
 module.exports = graphicNovelController;
