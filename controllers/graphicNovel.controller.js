@@ -1,4 +1,4 @@
-const { GraphicNovel, Episode } = require('../models');
+const { GraphicNovel, GraphicNovelEpisode } = require('../models');
 const HttpStatus = require('../enums/httpStatusCode.enum');
 const ResponseMessages = require('../enums/responseMessages.enum');
 const fs = require('fs');
@@ -47,7 +47,7 @@ graphicNovelController.createGraphicNovel = async (req, res) => {
             type,
             novelIcon,
             creatorId,
-            role: 'creator', // Set role to creator when created by a creator
+            role: 'creator', 
             status: 'pending' // Set status to pending for admin review
         });
 
@@ -94,7 +94,7 @@ graphicNovelController.addEpisode = async (req, res) => {
         }
 
         // Get the next episode number
-        const episodeCount = await Episode.count({
+        const episodeCount = await GraphicNovelEpisode.count({
             where: { graphicNovelId }
         });
         const episodeNumber = episodeCount + 1;
@@ -135,7 +135,7 @@ graphicNovelController.addEpisode = async (req, res) => {
         }
 
         // Create new episode
-        const newEpisode = await Episode.create({
+        const newEpisode = await GraphicNovelEpisode.create({
             graphicNovelId,
             episodeNumber,
             iconPath,
@@ -171,10 +171,13 @@ graphicNovelController.getCreatorGraphicNovels = async (req, res) => {
             where: { creatorId },
             attributes: ['id', 'title', 'novelIcon', 'creatorId', 'status', 'createdAt', 'updatedAt'],
             include: [{
-                model: Episode,
+                model: GraphicNovelEpisode,
+                as:'episodes',
                 attributes: ['id', 'episodeNumber', 'iconPath', 'pdfPath', 'createdAt']
             }],
-            order: [['createdAt', 'DESC'], [Episode, 'episodeNumber', 'ASC']]
+            order: [
+                [{ model: GraphicNovelEpisode, as: 'episodes' }, 'createdAt', 'DESC'],
+                [{ model: GraphicNovelEpisode, as: 'episodes' }, 'episodeNumber', 'ASC']            ]
         });
 
         return res.success(
@@ -207,10 +210,11 @@ graphicNovelController.getGraphicNovelDetails = async (req, res) => {
                 creatorId
             },
             include: [{
-                model: Episode,
+                model: GraphicNovelEpisode,
+                as: 'episodes',
                 attributes: ['id', 'episodeNumber', 'iconPath', 'pdfPath', 'createdAt']
             }],
-            order: [[Episode, 'episodeNumber', 'ASC']]
+            order: [['episodes', 'episodeNumber', 'ASC']]
         });
 
         if (!graphicNovel) {

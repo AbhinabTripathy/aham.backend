@@ -161,9 +161,14 @@ audiobookController.getCreatorAudiobooks = async (req, res) => {
             attributes: ['id', 'title', 'bookIcon', 'creatorId', 'status', 'createdAt', 'updatedAt'],
             include: [{
                 model: AudiobookEpisode,
+                as:'episodes',
                 attributes: ['id', 'episodeNumber', 'iconPath', 'youtubeUrl', 'createdAt']
             }],
-            order: [['createdAt', 'DESC'], [AudiobookEpisode, 'episodeNumber', 'ASC']]
+            order: [
+                [{ model: AudiobookEpisode, as: 'episodes' }, 'createdAt', 'DESC'],
+                [{ model: AudiobookEpisode, as: 'episodes' }, 'episodeNumber', 'ASC']
+
+            ]
         });
 
         return res.success(
@@ -198,9 +203,12 @@ audiobookController.getAudiobookDetails = async (req, res) => {
             attributes: ['id', 'title', 'bookIcon', 'creatorId', 'status', 'createdAt', 'updatedAt'],
             include: [{
                 model: AudiobookEpisode,
+                 as:'episodes',
                 attributes: ['id', 'episodeNumber', 'iconPath', 'youtubeUrl', 'createdAt']
             }],
-            order: [[AudiobookEpisode, 'episodeNumber', 'ASC']]
+            order: [
+                [{ model: audiobookEpisode, as: 'episodes' }, 'createdAt', 'DESC']
+            ]
         });
 
         if (!audiobook) {

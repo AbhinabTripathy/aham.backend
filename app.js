@@ -64,7 +64,7 @@ async function startServer() {
         
         // Sync models
         try {
-            await sequelize.sync({ force: false, alter: true });
+            await sequelize.sync({ force: false, alter: false });
             console.log('Database tables synced successfully.');
         } catch (syncError) {
             console.error("Database sync error:", syncError);

@@ -171,7 +171,7 @@ userController.getPublishedContent = async (req, res) => {
       where: { status: 'published' },
       include: [
         {
-          model: Episode,
+          model: GraphicNovelEpisode,
           as: 'episodes' // must match the alias in association
         }
       ],
@@ -218,7 +218,7 @@ userController.getPublishedGraphicNovels = async (req, res) => {
       where: { status: 'published' },
       include: [
         {
-          model: Episode,
+          model: GraphicNovelEpisode,
           as: 'episodes'
         }
       ],

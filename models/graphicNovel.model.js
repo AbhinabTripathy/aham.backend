@@ -19,7 +19,7 @@ const GraphicNovel = sequelize.define('graphicNovel', {
     creatorId: {
         type: DataTypes.INTEGER,
         allowNull: true
-        // Removed foreign key constraint to allow null values
+        
     },
     adminId: {
         type: DataTypes.STRING,
